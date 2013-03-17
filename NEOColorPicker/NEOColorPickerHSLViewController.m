@@ -4,7 +4,7 @@
 //  Created by Karthik Abram on 10/10/12.
 //  Copyright (c) 2012 Neovera Inc.
 //
-
+//  Modified by Tony Nguyen Pham (softgaroo.com) Jan 2013
 
 /*
  
@@ -27,18 +27,16 @@
 #import "UIColor+NEOColor.h"
 #import "NEOColorPickerGradientView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ColorPreviewView.h"
 
 #define CP_RESOURCE_CHECKERED_IMAGE                     @"colorPicker.bundle/color-picker-checkered"
 #define CP_RESOURCE_HUE_CIRCLE                          @"colorPicker.bundle/color-picker-hue"
 #define CP_RESOURCE_HUE_CROSSHAIR                       @"colorPicker.bundle/color-picker-crosshair"
-#define CP_RESOURCE_VALUE_MAX                           @"colorPicker.bundle/color-picker-max"
-#define CP_RESOURCE_VALUE_MIN                           @"colorPicker.bundle/color-picker-min"
-
 
 @interface NEOColorPickerHSLViewController () <NEOColorPickerGradientViewDelegate>
 {
-    CALayer *_colorLayer;
     CGFloat _hue, _saturation, _luminosity, _alpha;
+    ColorPreviewView* colorPreviewView;
 }
 @end
 
@@ -53,45 +51,21 @@
     [super viewDidLoad];
     
     self.navigationBar.topItem.title = self.dialogTitle;
-    self.checkeredView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:CP_RESOURCE_CHECKERED_IMAGE]];
     self.hueImageView.image = [UIImage imageNamed:CP_RESOURCE_HUE_CIRCLE];
-    
     self.hueImageView.layer.zPosition = 10;
     self.labelPreview.layer.zPosition = 11;
     
-    _colorLayer = [CALayer layer];
-    CGRect frame = self.hueImageView.frame;
-    frame.origin.x += (self.hueImageView.frame.size.width - 100) / 2;
-    frame.origin.y += (self.hueImageView.frame.size.height - 100) / 2;
-    frame.size = CGSizeMake(100, 100);
-    _colorLayer.frame = frame;
-    _colorLayer.backgroundColor = self.selectedColor.CGColor;
-    [self.view.layer addSublayer:_colorLayer];
-    [_colorLayer setNeedsDisplay];
-    
+    colorPreviewView = [[ColorPreviewView alloc] initWithFrame:CGRectZero color:self.selectedColor shadow:NO];
+    [self.view addSubview:colorPreviewView];
+    [self locateColorLayer];
+
     self.hueCrosshair.image = [UIImage imageNamed:CP_RESOURCE_HUE_CROSSHAIR];
     self.hueCrosshair.layer.zPosition = 15;
     
-    self.gradientViewSaturation.backgroundColor = [UIColor clearColor];
-    self.gradientViewSaturation.layer.masksToBounds = YES;
-    self.gradientViewSaturation.layer.cornerRadius = 5.0;
-    self.gradientViewSaturation.layer.borderColor = [UIColor grayColor].CGColor;
-    self.gradientViewSaturation.layer.borderWidth = 2.0;
     self.gradientViewSaturation.delegate = self;
-
-    self.gradientViewLuminosity.backgroundColor = [UIColor clearColor];
-    self.gradientViewLuminosity.layer.masksToBounds = YES;
-    self.gradientViewLuminosity.layer.cornerRadius = 5.0;
-    self.gradientViewLuminosity.layer.borderColor = [UIColor grayColor].CGColor;
-    self.gradientViewLuminosity.layer.borderWidth = 2.0;
     self.gradientViewLuminosity.delegate = self;
-
     self.gradientViewAlpha.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:CP_RESOURCE_CHECKERED_IMAGE]];
-    self.gradientViewAlpha.layer.masksToBounds = YES;
-    self.gradientViewAlpha.layer.cornerRadius = 5.0;
-    self.gradientViewAlpha.layer.borderColor = [UIColor grayColor].CGColor;
-    self.gradientViewAlpha.layer.borderWidth = 2.0;
-    self.gradientViewAlpha.delegate = self;  
+    self.gradientViewAlpha.delegate = self;
 
     [[self.selectedColor neoToHSL] getHue:&_hue saturation:&_saturation brightness:&_luminosity alpha:&_alpha];
     if (self.disallowOpacitySelection) {
@@ -114,27 +88,79 @@
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(huePanOrTap:)];
     [self.hueImageView addGestureRecognizer:tapRecognizer];
     
-    self.buttonSatMax.backgroundColor = [UIColor clearColor];
-    [self.buttonSatMax setImage:[UIImage imageNamed:CP_RESOURCE_VALUE_MAX] forState:UIControlStateNormal];
-    self.buttonSatMin.backgroundColor = [UIColor clearColor];
-    [self.buttonSatMin setImage:[UIImage imageNamed:CP_RESOURCE_VALUE_MIN] forState:UIControlStateNormal];
+    [self setupButton:self.buttonSatMax withBundleImageIdx:BUNDLE_IMAGE_MAX];
+    [self setupButton:self.buttonSatMin withBundleImageIdx:BUNDLE_IMAGE_MIN];
 
-    self.buttonLumMax.backgroundColor = [UIColor clearColor];
-    [self.buttonLumMax setImage:[UIImage imageNamed:CP_RESOURCE_VALUE_MAX] forState:UIControlStateNormal];
-    self.buttonLumMin.backgroundColor = [UIColor clearColor];
-    [self.buttonLumMin setImage:[UIImage imageNamed:CP_RESOURCE_VALUE_MIN] forState:UIControlStateNormal];
+    [self setupButton:self.buttonLumMax withBundleImageIdx:BUNDLE_IMAGE_MAX];
+    [self setupButton:self.buttonLumMin withBundleImageIdx:BUNDLE_IMAGE_MIN];
 
-    self.buttonAlphaMax.backgroundColor = [UIColor clearColor];
-    [self.buttonAlphaMax setImage:[UIImage imageNamed:CP_RESOURCE_VALUE_MAX] forState:UIControlStateNormal];
-    self.buttonAlphaMin.backgroundColor = [UIColor clearColor];
-    [self.buttonAlphaMin setImage:[UIImage imageNamed:CP_RESOURCE_VALUE_MIN] forState:UIControlStateNormal];
+    [self setupButton:self.buttonAlphaMax withBundleImageIdx:BUNDLE_IMAGE_MAX];
+    [self setupButton:self.buttonAlphaMin withBundleImageIdx:BUNDLE_IMAGE_MIN];
+
+    [self setAdjustPanelPositionWithOrientation:[self isLandscape]];
+}
+
+-(void)locateColorLayer
+{
+    CGRect frame = self.hueImageView.frame;
+    frame.origin.x += (self.hueImageView.frame.size.width - 90) / 2;
+    frame.origin.y += (self.hueImageView.frame.size.height - 100) / 2;
+    frame.size = CGSizeMake(100, 100);
+    colorPreviewView.frame = frame;
+}
+
+-(void)setAdjustPanelPositionWithOrientation:(BOOL)landscapeMode
+{
+    int lsgap = 0;
+    if (NEOColorPicker4InchDisplay()) {
+        lsgap = 20;
+    } else {
+        [self resizeGradientView:self.gradientViewSaturation maxbutton: self.buttonSatMax];
+        [self resizeGradientView:self.gradientViewLuminosity maxbutton: self.buttonLumMax];
+        [self resizeGradientView:self.gradientViewAlpha maxbutton: self.buttonAlphaMax];
+    }
+
+    /*
+     * Re-locate hue circle
+     */
+    CGPoint pt;
+    if (landscapeMode) {
+        CGRect frame = self.buttonLumMax.frame;
+        pt = CGPointMake(frame.origin.x + frame.size.width + self.hueImageView.bounds.size.width * 0.5 + lsgap,
+                         frame.origin.y + frame.size.width * 0.5);
+    } else {
+        CGRect frame = self.gradientViewAlpha.frame;
+        pt = CGPointMake(frame.origin.x + frame.size.width * 0.5,
+                         frame.origin.y + self.hueImageView.bounds.size.height * 0.5 + 60);
+    }
+
+    self.hueImageView.center = pt;
+    self.labelPreview.center = pt;
+    [self locateColorLayer];
+    [self positionHue];
+    self.HueLabel.center = CGPointMake(self.hueImageView.frame.origin.x + 45,
+                                       self.hueImageView.frame.origin.y + 12);
 }
 
 
+-(void)resizeGradientView:(NEOColorPickerGradientView*)gradientView maxbutton:(UIButton *)buttonMax
+{
+    CGRect frame = gradientView.frame;
+    if ([self isLandscape]) {
+        frame.size.width = 200;
+    } else {
+        frame.size.width = 236; /// Standard length
+    }
+    gradientView.frame = frame;
+    CGPoint pt = gradientView.center;
+    pt.x += (gradientView.bounds.size.width + buttonMax.bounds.size.width + 10) * 0.5;
+    buttonMax.center = pt;
+}
+
 - (void) positionHue {
     CGFloat angle = M_PI * 2 * _hue - M_PI;
-    CGFloat cx = 76 * cos(angle) + 160 - 16.5;
-    CGFloat cy = 76 * sin(angle) + 90 + self.hueImageView.frame.origin.y - 16.5;
+    CGFloat cx = 76 * cos(angle) + self.hueImageView.frame.origin.x + 90 - 16.5;
+    CGFloat cy = 76 * sin(angle) + self.hueImageView.frame.origin.y + 90 - 16.5;
     CGRect frame = self.hueCrosshair.frame;
     frame.origin.x = cx;
     frame.origin.y = cy;
@@ -164,21 +190,19 @@
     [self.gradientViewAlpha setNeedsDisplay];
     
     self.selectedColor = [UIColor colorWithHue:_hue saturation:_saturation brightness:_luminosity alpha:_alpha];
-    _colorLayer.backgroundColor = self.selectedColor.CGColor;
-    [_colorLayer setNeedsDisplay];
+    [colorPreviewView setDisplayColor:self.selectedColor];
     
     self.labelPreview.textColor = [[self.selectedColor neoComplementary] neoColorWithAlpha:1.0];
 }
 
 
 - (void)viewDidUnload {
-    _colorLayer = nil;
+    colorPreviewView = nil;
     [self setNavigationBar:nil];
     [self setHueCrosshair:nil];
     [self setGradientViewSaturation:nil];
     [self setGradientViewLuminosity:nil];
     [self setGradientViewAlpha:nil];
-    [self setCheckeredView:nil];
     [self setButtonSatMin:nil];
     [self setButtonSatMax:nil];
     [self setButtonLumMax:nil];
@@ -188,6 +212,7 @@
     [self setButtonLumMin:nil];
     [self setLabelTransparency:nil];
     [self setLabelPreview:nil];
+    [self setHueLabel:nil];
     [super viewDidUnload];
 }
 
@@ -222,7 +247,6 @@
     }
 }
 
-
 - (void)colorPickerGradientView:(NEOColorPickerGradientView *)view valueChanged:(CGFloat)value {
     if (view == self.gradientViewSaturation) {
         _saturation = value;
@@ -252,5 +276,10 @@
     [self valuesChanged];
 }
 
+-(void)saveButtonPressed;
+{
+    [super saveButtonPressed];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

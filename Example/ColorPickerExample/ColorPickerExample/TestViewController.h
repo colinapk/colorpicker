@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TestViewController : UIViewController
+@interface TestViewController : UIViewController<UIPopoverControllerDelegate>
+
+//- (IBAction)buttonPressPickColor:(id)sender;
+//
+///*
+// * This button instance is needed for calculating popover position
+// */
+//@property (weak, nonatomic) IBOutlet UIButton *pickColorButton;
+@property (weak, nonatomic) IBOutlet UIButton *pickColorButton;
 
 - (IBAction)buttonPressPickColor:(id)sender;
 

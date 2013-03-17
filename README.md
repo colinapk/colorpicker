@@ -6,11 +6,26 @@ Background
 
 A color picker is the most conspicuously absent component in the collection of built-in controls provided by Apple in the iOS library. There are many open-source components that have sprung up to fill the gap. This component was created for the [ToonThat][https://itunes.apple.com/us/app/toonthat/id584478951?ls=1&mt=8] application as we didn't find the level of flexibility and feature-set in the others.
 
+Improvements by Tony Pham (softgaroo.com)
+----------
+* Support landscape mode for iPhone
+* Support iPad
+* Animation when saving Favorite colors
+* Use NavigationController to push views
+* Clean and improve the code for getting easier readable and maintenance
+
+The new improvements are used already in my freeware [Composite photo app][https://itunes.apple.com/us/app/composite-photo/id590158659?ls=1&mt=8]. To see them in actions, look at videos:
+*http://www.youtube.com/watch?v=a7g_rYtjtL0
+*http://www.youtube.com/watch?v=4XjQuMLG3Qw
+
 Screenshots
 -------
 ![Simple selector](https://github.com/neovera/colorpicker/blob/master/etc/image1.png?raw=true)
 ![Hue Grid selector](https://github.com/neovera/colorpicker/blob/master/etc/image2.png?raw=true)
 ![HSL selector](https://github.com/neovera/colorpicker/blob/master/etc/image3.png?raw=true)
+![Landscape](https://github.com/neovera/colorpicker/blob/master/etc/image4.png?raw=true)
+![Landscape](https://github.com/neovera/colorpicker/blob/master/etc/image5.png?raw=true)
+![iPad](https://github.com/neovera/colorpicker/blob/master/etc/image6.png?raw=true)
 
 
 Features

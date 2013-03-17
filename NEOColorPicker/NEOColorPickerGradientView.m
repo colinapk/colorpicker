@@ -4,6 +4,7 @@
 //  Created by Karthik Abram on 10/10/12.
 //  Copyright (c) 2012 Neovera Inc.
 //
+//  Modified by Tony Nguyen Pham (softgaroo.com) Jan 2013
 
 /*
  
@@ -21,6 +22,7 @@
  
  */
 
+#import <QuartzCore/QuartzCore.h>
 
 #import "NEOColorPickerGradientView.h"
 
@@ -47,6 +49,12 @@
     
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(panOrTapValue:)];
     [self addGestureRecognizer:tapGestureRecognizer];
+    
+    self.backgroundColor = [UIColor clearColor];
+    self.layer.masksToBounds = YES;
+    self.layer.cornerRadius = 5.0;
+    self.layer.borderColor = [UIColor grayColor].CGColor;
+    self.layer.borderWidth = 2.0;
 }
 
 
@@ -80,17 +88,21 @@
     if (!self.hidden) {
         if (!self.selectorView) {
             UIImageView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:CP_RESOURCE_GRADIENT_TRACKER]];
-            view.frame = CGRectMake(0, self.frame.origin.y, 14, 40);
-            [self.superview addSubview:view];
+            view.frame = CGRectMake(0, 0, 14, 40);
+            [self addSubview:view];
             self.selectorView = view;
         }
         
         CGRect frame = self.selectorView.frame;
-        frame.origin.x = value * (self.frame.size.width - 4) + self.frame.origin.x - 7 + 2; // + 2 for border
-        self.selectorView.frame = frame;        
+        frame.origin.x = value * (self.frame.size.width - 4) - 7 + 2; // + 2 for border
+        self.selectorView.frame = frame;
     }
 }
 
+-(void) layout
+{
+    [self setValue:_value];
+}
 
 - (void) panOrTapValue:(UIGestureRecognizer *) recognizer {
     switch (recognizer.state) {

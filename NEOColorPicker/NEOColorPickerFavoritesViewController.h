@@ -1,9 +1,10 @@
 //
-//  NEOColorPickerHueGridViewController.h
+//  NEOColorPickerFavoritesViewController.h
 //
-//  Created by Karthik Abram on 10/23/12.
+//  Created by Karthik Abram on 10/24/12.
 //  Copyright (c) 2012 Neovera Inc.
 //
+//  Modified by Tony Nguyen Pham (softgaroo.com) Jan 2013
 
 /*
  
@@ -21,12 +22,15 @@
  
  */
 
-
 #import "NEOColorPickerBaseViewController.h"
 
-@interface NEOColorPickerHueGridViewController : NEOColorPickerBaseViewController
+@interface NEOColorPickerFavoritesViewController : NEOColorPickerBaseViewController<UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIImageView *colorBar;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+
+- (IBAction)pageValueChange:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *clearAllButton;
+- (IBAction)toucheDownClearButton:(id)sender;
 
 @end

@@ -4,6 +4,7 @@
 //  Created by Karthik Abram on 10/23/12.
 //  Copyright (c) 2012 Neovera Inc.
 //
+//  Modified by Tony Nguyen Pham (softgaroo.com) Jan 2013
 
 /*
  
@@ -22,6 +23,7 @@
  */
 
 
+//#import "NEOViewController.h"
 #import "NEOColorPickerBaseViewController.h"
 
 

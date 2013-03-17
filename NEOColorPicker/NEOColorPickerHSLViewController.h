@@ -4,6 +4,7 @@
 //  Created by Karthik Abram on 10/10/12.
 //  Copyright (c) 2012 Neovera Inc.
 //
+//  Modified by Tony Nguyen Pham (softgaroo.com) Jan 2013
 
 
 /*
@@ -25,6 +26,7 @@
 
 #import <UIKit/UIKit.h>
 #import "NEOColorPickerBaseViewController.h"
+#import "ColorPreviewView.h"
 
 
 @class NEOColorPickerGradientView;
@@ -37,7 +39,6 @@
 @property (weak, nonatomic) IBOutlet NEOColorPickerGradientView *gradientViewSaturation;
 @property (weak, nonatomic) IBOutlet NEOColorPickerGradientView *gradientViewLuminosity;
 @property (weak, nonatomic) IBOutlet NEOColorPickerGradientView *gradientViewAlpha;
-@property (weak, nonatomic) IBOutlet UIImageView *checkeredView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSatMin;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSatMax;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLumMax;
@@ -48,6 +49,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelPreview;
 
 - (IBAction)buttonPressMaxMin:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *HueLabel;
 
 
 @end

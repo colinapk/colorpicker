@@ -4,6 +4,7 @@
 //  Created by Karthik Abram on 10/23/12.
 //  Copyright (c) 2012 Neovera Inc.
 //
+//  Modified by Tony Nguyen Pham (softgaroo.com) Jan 2013
 
 /*
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +21,20 @@
 */
 
 
+enum BundleImageIdx
+{
+    BUNDLE_IMAGE_HUE,
+    BUNDLE_IMAGE_FAVORITE_ADD,
+    BUNDLE_IMAGE_FAVORITE_PICKER,
+    BUNDLE_IMAGE_GRID,
+    BUNDLE_IMAGE_CLEANER,
+    BUNDLE_IMAGE_MAX,
+    BUNDLE_IMAGE_MIN
+};
+
+#define SELECTED_COLOR_BOX_FRAME    CGRectMake(130, 6, 100, 40)
+
+
 @class NEOColorPickerBaseViewController;
 
 @protocol NEOColorPickerViewControllerDelegate <NSObject>
@@ -32,7 +47,7 @@
 @end
 
 
-#define NEOColorPicker4InchDisplay()  [UIScreen mainScreen].bounds.size.height == 568
+#define NEOColorPicker4InchDisplay()  ([UIScreen mainScreen].bounds.size.height == 568)
 
 
 @interface NEOColorPickerFavoritesManager : NSObject
@@ -42,6 +57,7 @@
 + (NEOColorPickerFavoritesManager *) instance;
 
 - (void) addFavorite:(UIColor *)color;
+-(void) clearAllFavoriteColors;
 
 
 @end
@@ -58,9 +74,12 @@
 
 @property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
 
+-(void)setupShadow:(CALayer *)layer;
 
-- (IBAction)buttonPressCancel:(id)sender;
-- (IBAction)buttonPressDone:(id)sender;
+-(void)saveButtonPressed;
+-(void)setAdjustPanelPositionWithOrientation:(BOOL)landscapeMode;
+-(BOOL)isLandscape;
+-(int)getScreenWidth;
+-(void)setupButton:(UIButton*)button withBundleImageIdx:(int)bundleImageIdx;
 
-- (void) setupShadow:(CALayer *)layer;
 @end
