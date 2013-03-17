@@ -12,20 +12,21 @@ Improvements by Tony Pham (softgaroo.com)
 * Support iPad
 * Animation when saving Favorite colors
 * Use NavigationController to push views
-* Clean and improve the code for getting easier readable and maintenance
+* Clean and improve the code for being easier readable and maintenance
 
 The new improvements are used already in my freeware [Composite photo app][https://itunes.apple.com/us/app/composite-photo/id590158659?ls=1&mt=8]. To see them in actions, look at videos:
-*http://www.youtube.com/watch?v=a7g_rYtjtL0
-*http://www.youtube.com/watch?v=4XjQuMLG3Qw
+
+* http://www.youtube.com/watch?v=a7g_rYtjtL0
+* http://www.youtube.com/watch?v=4XjQuMLG3Qw
 
 Screenshots
 -------
-![Simple selector](https://github.com/neovera/colorpicker/blob/master/etc/image1.png?raw=true)
-![Hue Grid selector](https://github.com/neovera/colorpicker/blob/master/etc/image2.png?raw=true)
-![HSL selector](https://github.com/neovera/colorpicker/blob/master/etc/image3.png?raw=true)
-![Landscape](https://github.com/neovera/colorpicker/blob/master/etc/image4.png?raw=true)
-![Landscape](https://github.com/neovera/colorpicker/blob/master/etc/image5.png?raw=true)
-![iPad](https://github.com/neovera/colorpicker/blob/master/etc/image6.png?raw=true)
+![Simple selector](https://github.com/nguyenpham/colorpicker/blob/master/etc/image1.png?raw=true)
+![Hue Grid selector](https://github.com/nguyenpham/colorpicker/blob/master/etc/image2.png?raw=true)
+![HSL selector](https://github.com/nguyenpham/colorpicker/blob/master/etc/image3.png?raw=true)
+![Landscape](https://github.com/nguyenpham/colorpicker/blob/master/etc/image4.png?raw=true)
+![Landscape](https://github.com/nguyenpham/colorpicker/blob/master/etc/image5.png?raw=true)
+![iPad](https://github.com/nguyenpham/colorpicker/blob/master/etc/image6.png?raw=true)
 
 
 Features
