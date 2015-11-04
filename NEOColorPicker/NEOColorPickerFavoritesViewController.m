@@ -137,7 +137,7 @@
         int x = i % colorPerPage;
         int column = x % colorPerRow;
         int row = x / colorPerRow;
-        CGRect frame = CGRectMake(page * screenWidth + 8 + (column * 78), 8 + row * 48, 70, 40);
+        CGRect frame = CGRectMake(page * screenWidth + 8 + (column * 78),SELECTED_COLOR_BOX_FRAME.origin.y + 8 + row * 48, 70, 40);
         [colorView setFrame:frame];
         i++;
     }

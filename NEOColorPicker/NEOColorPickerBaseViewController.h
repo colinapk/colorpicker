@@ -32,7 +32,7 @@ enum BundleImageIdx
     BUNDLE_IMAGE_MIN
 };
 
-#define SELECTED_COLOR_BOX_FRAME    CGRectMake(130, 6, 100, 40)
+#define SELECTED_COLOR_BOX_FRAME    CGRectMake(130, 6+32, 100, 40)
 
 
 @class NEOColorPickerBaseViewController;

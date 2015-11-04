@@ -131,7 +131,7 @@
             column = i % 4;
             row = i / 4;
         }
-        colorPreviewView.frame = CGRectMake(8 + column * (width+3), 8 + row * 48, width, 40);
+        colorPreviewView.frame = CGRectMake(8 + column * (width+3), SELECTED_COLOR_BOX_FRAME.origin.y + 8 + row * 48, width, 40);
     }
 }
 
@@ -159,7 +159,7 @@
 - (void) colorGridTapped:(UITapGestureRecognizer *)recognizer {
     CGPoint point = [recognizer locationInView:self.simpleColorGrid];
     int width = [self colorLayerWidth];
-    int row = (int)((point.y - 8) / 48);
+    int row = (int)((point.y - 8 - SELECTED_COLOR_BOX_FRAME.origin.y) / 48);
     int column = (int)((point.x - 8) / width);
     int index = [self isLandscape] ? (row + column * 4) : (row * 4 + column);
     self.selectedColor = [[colorPreviewArray objectAtIndex:index] getDisplayColor];
