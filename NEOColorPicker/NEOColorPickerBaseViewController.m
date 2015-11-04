@@ -136,7 +136,7 @@
 
 -(int)getScreenWidth
 {
-    int screenWidth = [self isLandscape] ? (NEOColorPicker4InchDisplay() ? 568 : 480) : 320;
+    int screenWidth = [UIScreen mainScreen].bounds.size.width;
     return screenWidth;
 }
 
