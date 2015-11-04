@@ -31,7 +31,7 @@
                     <animations/>
                 </scrollView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="16">
-                    <rect key="frame" x="10" y="430" width="300" height="30"/>
+                    <rect key="frame" x="10" y="428" width="300" height="30"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <animations/>
                 </imageView>
